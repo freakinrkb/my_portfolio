@@ -8,17 +8,29 @@
 
 export type CodingStats = {
   githubRepos: { value: string; live: boolean };
-  commits30d: { value: string; live: boolean };
+  commits30d: { value: string; live: boolean; scope: "all" | "public" };
   leetcodeSolved: { value: string; live: boolean };
 };
 
 const FALLBACK: CodingStats = {
   githubRepos: { value: "10+", live: false },
-  commits30d: { value: "—", live: false },
+  commits30d: { value: "—", live: false, scope: "public" },
   leetcodeSolved: { value: "500+", live: false },
 };
 
 const GITHUB_USER = "freakinrkb";
+
+/**
+ * Optional read-only token (env GITHUB_TOKEN, never committed).
+ * With it, GitHub returns your own events including private pushes —
+ * without it, only public events are visible.
+ */
+function githubHeaders(): Record<string, string> {
+  const headers: Record<string, string> = { Accept: "application/vnd.github+json" };
+  const token = process.env.GITHUB_TOKEN;
+  if (token) headers.Authorization = `Bearer ${token}`;
+  return headers;
+}
 
 async function fetchJson(url: string, init: RequestInit, timeoutMs: number) {
   const res = await fetch(url, { ...init, signal: AbortSignal.timeout(timeoutMs) });
@@ -51,17 +63,23 @@ type PublicEvent = {
 };
 
 /**
- * Count public commits authored in the trailing 30 days via the events API.
- * Up to 3 pages (300 events) to cover active months. Public only.
+ * Count commits authored in the trailing 30 days.
+ * Authenticated requests (GITHUB_TOKEN) include private pushes via
+ * /users/:u/events; otherwise only public events are visible.
+ * Up to 3 pages (300 events) to cover active months.
  */
 async function commitsLast30Days(): Promise<Pick<CodingStats, "commits30d">> {
   try {
+    const authed = Boolean(process.env.GITHUB_TOKEN);
+    const endpoint = authed
+      ? `https://api.github.com/users/${GITHUB_USER}/events?per_page=100`
+      : `https://api.github.com/users/${GITHUB_USER}/events/public?per_page=100`;
     const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
     let count = 0;
     for (let page = 1; page <= 3; page++) {
       const events = (await fetchJson(
-        `https://api.github.com/users/${GITHUB_USER}/events/public?per_page=100&page=${page}`,
-        { headers: { Accept: "application/vnd.github+json" }, next: { revalidate: 21600 } },
+        `${endpoint}&page=${page}`,
+        { headers: githubHeaders(), next: { revalidate: 21600 } },
         8000
       )) as PublicEvent[];
       if (!Array.isArray(events) || events.length === 0) break;
@@ -76,7 +94,7 @@ async function commitsLast30Days(): Promise<Pick<CodingStats, "commits30d">> {
       }
       if (oldest < cutoff) break;
     }
-    return { commits30d: { value: String(count), live: true } };
+    return { commits30d: { value: String(count), live: true, scope: authed ? "all" : "public" } };
   } catch {
     return { commits30d: FALLBACK.commits30d };
   }

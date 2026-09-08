@@ -9,9 +9,11 @@ import { Reveal } from "@/components/shared/reveal";
  */
 export async function Activity() {
   const stats = await getCodingStats();
+  const commitsLabel =
+    stats.commits30d.scope === "all" ? "Commits · last 30 days" : "Public commits · last 30 days";
   const tiles = [
     { value: stats.githubRepos.value, live: stats.githubRepos.live, label: "Public GitHub repos" },
-    { value: stats.commits30d.value, live: stats.commits30d.live, label: "Public commits · last 30 days" },
+    { value: stats.commits30d.value, live: stats.commits30d.live, label: commitsLabel },
     { value: stats.leetcodeSolved.value, live: stats.leetcodeSolved.live, label: "LeetCode problems solved" },
   ];
 
@@ -21,7 +23,7 @@ export async function Activity() {
         <SectionHeading
           eyebrow="Activity"
           title="Consistency, measured"
-          description="Public contribution signals, refreshed at build time; resume numbers stand in if a service is unreachable."
+          description="Contribution signals, refreshed at build time; resume numbers stand in if a service is unreachable."
         />
       </Reveal>
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
