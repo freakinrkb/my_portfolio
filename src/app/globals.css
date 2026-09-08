@@ -3,8 +3,9 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /**
- * Design tokens — Linear / Vercel minimal.
- * Light-first, dark via `.dark` class (next-themes). No rainbow gradients.
+ * Design tokens — Linear / Vercel minimal with a single emerald accent.
+ * Light-first, dark via `.dark` class (next-themes). Monochrome base;
+ * emerald is used sparingly (active states, glows, key highlights).
  * All UI components consume these CSS vars via @theme inline below.
  */
 :root {
@@ -27,6 +28,11 @@
   --input: #e4e4e7;
   --ring: #09090b;
   --radius: 0.625rem;
+  /* Brand — single accent hue */
+  --brand: #059669;
+  --brand-foreground: #ffffff;
+  --brand-soft: #ecfdf5;
+  --glow: rgba(16, 185, 129, 0.16);
 }
 
 .dark {
@@ -48,6 +54,11 @@
   --border: #27272a;
   --input: #27272a;
   --ring: #d4d4d8;
+  /* Brand — single accent hue */
+  --brand: #34d399;
+  --brand-foreground: #052e22;
+  --brand-soft: #062e24;
+  --glow: rgba(52, 211, 153, 0.14);
 }
 
 @theme inline {
@@ -69,6 +80,9 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-soft: var(--brand-soft);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -94,7 +108,7 @@
   }
 }
 
-/* Subtle hero grid — used by AnimatedBackground in Phase 2/3 */
+/* Subtle hero grid + single-hue glow — used by AnimatedBackground */
 .bg-grid {
   background-image:
     linear-gradient(to right, color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px),
@@ -102,6 +116,33 @@
   background-size: 56px 56px;
 }
 
+.bg-glow-brand {
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, var(--glow) 0%, transparent 70%);
+}
+
 .mask-fade-y {
   mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+}
+
+/* Availability pulse dot */
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.82);
+  }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse-dot {
+    animation: none;
+  }
 }
