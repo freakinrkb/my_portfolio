@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { SITE_ROUTES } from "@/lib/constants";
@@ -10,10 +11,12 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 
-/** Sticky glass navbar with mobile menu. Active route highlighted. */
+/** Sticky glass navbar with mobile menu + scroll progress. Active route highlighted. */
 export function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 24, mass: 0.4 });
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/70 backdrop-blur-xl">
@@ -81,6 +84,11 @@ export function Navbar() {
           ))}
         </ul>
       )}
+      <motion.div
+        aria-hidden
+        style={{ scaleX: progress }}
+        className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-brand"
+      />
     </header>
   );
 }

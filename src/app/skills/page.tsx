@@ -3,6 +3,7 @@ import { profile, skills } from "@/content/portfolio";
 import { PageHeader } from "@/components/shared/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Spotlight } from "@/components/shared/spotlight";
 import { Reveal } from "@/components/shared/reveal";
 
 export const metadata: Metadata = {
@@ -21,7 +22,8 @@ export default function SkillsPage() {
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {Object.entries(skills).map(([group, items]) => (
-          <Reveal key={group}>
+          <Reveal key={group} className="h-full">
+            <Spotlight>
             <Card className="h-full">
               <CardHeader>
                 <CardTitle className="text-base">
@@ -37,6 +39,7 @@ export default function SkillsPage() {
                 ))}
               </CardContent>
             </Card>
+            </Spotlight>
           </Reveal>
         ))}
       </div>

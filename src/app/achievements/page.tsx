@@ -3,6 +3,7 @@ import { Award } from "lucide-react";
 import { achievements, profile } from "@/content/portfolio";
 import { PageHeader } from "@/components/shared/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Spotlight } from "@/components/shared/spotlight";
 import { Reveal } from "@/components/shared/reveal";
 
 export const metadata: Metadata = {
@@ -21,7 +22,8 @@ export default function AchievementsPage() {
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {achievements.map((a) => (
-          <Reveal key={a.title}>
+          <Reveal key={a.title} className="h-full">
+            <Spotlight>
             <Card className="h-full">
               <CardHeader className="flex-row items-start gap-3 space-y-0">
                 <span className="rounded-md bg-brand-soft p-2 text-brand" aria-hidden>
@@ -31,6 +33,7 @@ export default function AchievementsPage() {
               </CardHeader>
               <CardContent className="text-sm leading-relaxed text-muted-foreground">{a.detail}</CardContent>
             </Card>
+            </Spotlight>
           </Reveal>
         ))}
       </div>

@@ -6,6 +6,7 @@ import { projects } from "@/content/portfolio";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ProjectVisual } from "@/components/projects/project-visual";
 import { Separator } from "@/components/ui/separator";
 import { Reveal } from "@/components/shared/reveal";
 
@@ -86,6 +87,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             </Link>
           )}
         </div>
+      </Reveal>
+
+      <Reveal>
+        <ProjectVisual slug={project.slug} className="mt-6" />
       </Reveal>
 
       <Separator className="my-8" />
