@@ -177,6 +177,26 @@
   border: 0;
 }
 
+/**
+ * Neumorphic (soft-emboss) card surface — scoped accent treatment.
+ * Light: off-white surface with dark/white dual shadows.
+ * Dark: deep surface with black lift + faint top light (contrast-safe).
+ */
+.neu {
+  border-color: transparent;
+  background: linear-gradient(145deg, #f5f7fa, #e6e9ef);
+  box-shadow:
+    5px 5px 12px rgba(163, 177, 198, 0.45),
+    -5px -5px 12px rgba(255, 255, 255, 0.9);
+}
+
+.dark .neu {
+  background: linear-gradient(145deg, #17171b, #101013);
+  box-shadow:
+    5px 5px 12px rgba(0, 0, 0, 0.55),
+    -4px -4px 10px rgba(255, 255, 255, 0.05);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-pulse-dot,
   .animate-marquee {

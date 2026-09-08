@@ -24,7 +24,7 @@ export default function SkillsPage() {
         {Object.entries(skills).map(([group, items]) => (
           <Reveal key={group} className="h-full">
             <Spotlight>
-            <Card className="h-full">
+            <Card className="neu h-full">
               <CardHeader>
                 <CardTitle className="text-base">
                   {group}{" "}

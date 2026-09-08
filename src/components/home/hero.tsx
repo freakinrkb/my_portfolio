@@ -141,7 +141,7 @@ export function Hero() {
       <Reveal className="mt-14">
         <dl className="grid grid-cols-1 gap-px overflow-hidden rounded-xl border bg-border sm:grid-cols-3">
           {STATS.map((stat) => (
-            <div key={stat.label} className="bg-card px-6 py-5">
+            <div key={stat.label} className="neu px-6 py-5">
               <dd className="text-2xl font-semibold tracking-tight text-brand">
                 <Counter to={stat.to} suffix={stat.suffix} />
               </dd>

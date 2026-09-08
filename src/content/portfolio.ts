@@ -62,15 +62,46 @@ export const socials: SocialLink[] = [
 export const techStack: string[] = [
   "Java",
   "Spring Boot",
+  "Spring AI",
   "Node.js",
   "Express.js",
   "REST APIs",
-  "MySQL",
   "PostgreSQL",
+  "Redis",
+  "Kubernetes",
   "Docker",
 ];
 
 export const projects: Project[] = [
+  {
+    slug: "lovable-clone-ai-website-builder",
+    title: "Lovable Clone — AI Website Builder SaaS",
+    tagline: "Prompt-to-deployed-site platform: chat, stream code, preview, deploy, bill.",
+    description:
+      "Full-stack AI-powered platform where users create, edit, preview, deploy, and collaborate on web projects using natural language prompts. Built an AI-powered Lovable.dev clone using Spring Boot, Spring AI, Kubernetes, Redis, MinIO, and Stripe, featuring streaming code generation, collaborative project management, isolated preview deployments, JWT security, subscription billing, and live AI-assisted file editing.",
+    tags: ["Full-Stack", "AI SaaS", "Platform"],
+    technologies: [
+      "Java 21",
+      "Spring Boot 4",
+      "Spring AI",
+      "PostgreSQL",
+      "Redis",
+      "MinIO",
+      "Kubernetes",
+      "Docker",
+      "Stripe",
+      "React",
+    ],
+    githubUrl: "#",
+    liveUrl: "#",
+    featured: true,
+    architecture:
+      "React frontend over REST + SSE APIs into a Spring Boot backend (ChatController → AiGenerationService → Spring AI ChatClient → LLM with function calling). Streaming responses parse into chat events persisted via JPA/PostgreSQL; generated files land in MinIO. Deployments run through the Fabric8 Kubernetes client assigning isolated Vite runner pods, with Redis mapping routes to pod IPs behind a Node reverse proxy (project123.domain.com). Stripe Checkout + webhooks drive subscription billing with usage/token tracking.",
+    challenges:
+      "Streaming token-by-token code generation over SSE while keeping the live preview consistent; provisioning isolated per-project preview deployments on Kubernetes with correct route-to-pod mapping; securing multi-tenant collaboration with JWT + role-based authorization.",
+    learnings:
+      "Context advisors (file-tree grounding) plus tool-calling beats raw prompting for codegen quality; event-driven chat persistence makes streaming resumable; usage metering has to be a first-class entity (UsageLog) from day one for billing trust.",
+  },
   {
     slug: "razorpay-payment-gateway-backend",
     title: "Razorpay Payment Gateway Backend",

@@ -18,7 +18,7 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <Reveal className="h-full">
       <Spotlight>
-        <Card className="flex h-full flex-col transition-all hover:-translate-y-1 hover:shadow-md">
+        <Card className="neu flex h-full flex-col transition-all hover:-translate-y-1 hover:shadow-md">
           <div className="px-4 pt-4">
             <ProjectVisual slug={project.slug} />
           </div>

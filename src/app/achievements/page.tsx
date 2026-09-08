@@ -24,7 +24,7 @@ export default function AchievementsPage() {
         {achievements.map((a) => (
           <Reveal key={a.title} className="h-full">
             <Spotlight>
-            <Card className="h-full">
+            <Card className="neu h-full">
               <CardHeader className="flex-row items-start gap-3 space-y-0">
                 <span className="rounded-md bg-brand-soft p-2 text-brand" aria-hidden>
                   <Award size={18} />

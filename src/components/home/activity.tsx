@@ -4,15 +4,15 @@ import { Reveal } from "@/components/shared/reveal";
 
 /**
  * Coding activity — live GitHub/LeetCode figures fetched at build time
- * (revalidated daily), falling back to resume numbers on any failure.
+ * (repos daily, commits hourly), falling back to resume numbers on failure.
+ * Commit counts cover public events only.
  */
 export async function Activity() {
   const stats = await getCodingStats();
   const tiles = [
     { value: stats.githubRepos.value, live: stats.githubRepos.live, label: "Public GitHub repos" },
-    { value: stats.githubFollowers.value, live: stats.githubFollowers.live, label: "GitHub followers" },
+    { value: stats.commits24h.value, live: stats.commits24h.live, label: "Public commits · last 24h" },
     { value: stats.leetcodeSolved.value, live: stats.leetcodeSolved.live, label: "LeetCode problems solved" },
-    { value: stats.leetcodeRating.value, live: false, label: "LeetCode rating (contest peak)" },
   ];
 
   return (
@@ -21,13 +21,13 @@ export async function Activity() {
         <SectionHeading
           eyebrow="Activity"
           title="Consistency, measured"
-          description="Live figures refresh daily at build time; resume numbers stand in if a service is unreachable."
+          description="Public contribution signals, refreshed at build time; resume numbers stand in if a service is unreachable."
         />
       </Reveal>
-      <div className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-xl border bg-border lg:grid-cols-4">
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         {tiles.map((t) => (
-          <Reveal key={t.label}>
-            <div className="h-full bg-card px-6 py-5">
+          <Reveal key={t.label} className="h-full">
+            <div className="neu h-full rounded-xl px-6 py-5">
               <p className="flex items-center gap-2 text-2xl font-semibold tracking-tight text-brand">
                 {t.value}
                 {t.live && (

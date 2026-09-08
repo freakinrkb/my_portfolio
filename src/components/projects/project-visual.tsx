@@ -51,6 +51,28 @@ function PaymentFlowDiagram() {
   );
 }
 
+function AiFlowDiagram() {
+  return (
+    <div role="img" aria-label="AI flow: prompt to context advisor to LLM with tools to files to live preview">
+      <div className="flex items-center gap-1.5">
+        <FlowNode label="Prompt" sub="Natural language" />
+        <FlowArrow />
+        <FlowNode label="Context" sub="File-tree advisor" />
+        <FlowArrow />
+        <FlowNode label="LLM + Tools" sub="Streaming SSE" className="border-brand/40" />
+      </div>
+      <div className="mt-2 flex items-center gap-1.5">
+        <FlowNode label="Files" sub="MinIO storage" />
+        <FlowArrow />
+        <FlowNode label="K8s Runner" sub="Isolated pod" className="border-brand/40" />
+        <FlowArrow />
+        <FlowNode label="Preview" sub="Live subdomain" />
+        <div className="flex-1" aria-hidden />
+      </div>
+    </div>
+  );
+}
+
 function TerminalMockup() {
   const lines = [
     { prompt: "$", cmd: "GET /api/portfolio/pnl?range=1y", out: null },
@@ -86,7 +108,13 @@ function TerminalMockup() {
 export function ProjectVisual({ slug, className }: { slug: string; className?: string }) {
   return (
     <div className={cn("rounded-xl border bg-muted/40 p-4", className)}>
-      {slug.includes("razorpay") ? <PaymentFlowDiagram /> : <TerminalMockup />}
+      {slug.includes("lovable") ? (
+        <AiFlowDiagram />
+      ) : slug.includes("razorpay") ? (
+        <PaymentFlowDiagram />
+      ) : (
+        <TerminalMockup />
+      )}
     </div>
   );
 }
