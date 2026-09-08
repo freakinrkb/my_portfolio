@@ -74,6 +74,24 @@ export const techStack: string[] = [
 
 export const projects: Project[] = [
   {
+    slug: "mindmirror-browsing-insights-extension",
+    title: "MindMirror — Browsing Insights Extension",
+    tagline: "In development: local browsing behavior → self-insight, no cloud.",
+    description:
+      "Privacy-first Manifest V3 extension (Chrome + Firefox) that turns local browsing behavior into self-insight. Per-tab timing plus on-device aggregates feed a local rule-based classifier, rendered as 7-day, rhythm, and category charts with deterministic insights in a React dashboard. Everything stays in IndexedDB on the device — no backend, no API keys, no sync.",
+    tags: ["Browser Extension", "Privacy", "React"],
+    technologies: ["TypeScript", "React 19", "Vite", "Tailwind CSS", "Dexie 4", "Recharts", "MV3"],
+    githubUrl: "https://github.com/freakinrkb/mindmirror",
+    liveUrl: "#",
+    featured: true,
+    architecture:
+      "Content tracker (content snapshot + 10s activity ping + video play-state) and a background session state machine (tab, idle, focus, heartbeat alarms) feed a local classifier, persisted in Dexie and surfaced to the dashboard through typed background messages. Cross-browser via a browser-first extension API layer (storage.session with local fallback).",
+    challenges:
+      "Reconciling Chrome service workers with Firefox event pages, filtering sub-2-second noise without losing rhythm signal, and auto-pausing on idle or window blur while keeping aggregates trustworthy.",
+    learnings:
+      "Privacy constraints simplify architecture — no backend to build or secure — and insight quality beats tracking quantity every time.",
+  },
+  {
     slug: "lovable-clone-ai-website-builder",
     title: "Lovable Clone — AI Website Builder SaaS",
     tagline: "Prompt-to-deployed-site platform: chat, stream code, preview, deploy, bill.",

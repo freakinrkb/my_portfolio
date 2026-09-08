@@ -11,7 +11,7 @@ export async function Activity() {
   const stats = await getCodingStats();
   const tiles = [
     { value: stats.githubRepos.value, live: stats.githubRepos.live, label: "Public GitHub repos" },
-    { value: stats.commits24h.value, live: stats.commits24h.live, label: "Public commits · last 24h" },
+    { value: stats.commits30d.value, live: stats.commits30d.live, label: "Public commits · last 30 days" },
     { value: stats.leetcodeSolved.value, live: stats.leetcodeSolved.live, label: "LeetCode problems solved" },
   ];
 

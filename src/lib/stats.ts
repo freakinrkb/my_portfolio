@@ -8,13 +8,13 @@
 
 export type CodingStats = {
   githubRepos: { value: string; live: boolean };
-  commits24h: { value: string; live: boolean };
+  commits30d: { value: string; live: boolean };
   leetcodeSolved: { value: string; live: boolean };
 };
 
 const FALLBACK: CodingStats = {
   githubRepos: { value: "10+", live: false },
-  commits24h: { value: "—", live: false },
+  commits30d: { value: "—", live: false },
   leetcodeSolved: { value: "500+", live: false },
 };
 
@@ -50,26 +50,35 @@ type PublicEvent = {
   payload?: { commits?: unknown[] };
 };
 
-/** Count public commits authored in the trailing 24h via the events API. */
-async function commitsLast24h(): Promise<Pick<CodingStats, "commits24h">> {
+/**
+ * Count public commits authored in the trailing 30 days via the events API.
+ * Up to 3 pages (300 events) to cover active months. Public only.
+ */
+async function commitsLast30Days(): Promise<Pick<CodingStats, "commits30d">> {
   try {
-    const events = (await fetchJson(
-      `https://api.github.com/users/${GITHUB_USER}/events/public?per_page=100`,
-      { headers: { Accept: "application/vnd.github+json" }, next: { revalidate: 3600 } },
-      8000
-    )) as PublicEvent[];
-    if (!Array.isArray(events)) throw new Error("bad shape");
-    const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+    const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
     let count = 0;
-    for (const e of events) {
-      if (e.type !== "PushEvent" || !e.created_at) continue;
-      if (new Date(e.created_at).getTime() < cutoff) continue;
-      const commits = Array.isArray(e.payload?.commits) ? e.payload.commits.length : 0;
-      count += commits;
+    for (let page = 1; page <= 3; page++) {
+      const events = (await fetchJson(
+        `https://api.github.com/users/${GITHUB_USER}/events/public?per_page=100&page=${page}`,
+        { headers: { Accept: "application/vnd.github+json" }, next: { revalidate: 21600 } },
+        8000
+      )) as PublicEvent[];
+      if (!Array.isArray(events) || events.length === 0) break;
+      let oldest = Infinity;
+      for (const e of events) {
+        if (e.type !== "PushEvent" || !e.created_at) continue;
+        const time = new Date(e.created_at).getTime();
+        oldest = Math.min(oldest, time);
+        if (time < cutoff) continue;
+        const commits = Array.isArray(e.payload?.commits) ? e.payload.commits.length : 0;
+        count += commits;
+      }
+      if (oldest < cutoff) break;
     }
-    return { commits24h: { value: String(count), live: true } };
+    return { commits30d: { value: String(count), live: true } };
   } catch {
-    return { commits24h: FALLBACK.commits24h };
+    return { commits30d: FALLBACK.commits30d };
   }
 }
 
@@ -112,6 +121,6 @@ async function leetcodeStats(): Promise<Pick<CodingStats, "leetcodeSolved">> {
 }
 
 export async function getCodingStats(): Promise<CodingStats> {
-  const [profile, commits, lc] = await Promise.all([githubProfile(), commitsLast24h(), leetcodeStats()]);
+  const [profile, commits, lc] = await Promise.all([githubProfile(), commitsLast30Days(), leetcodeStats()]);
   return { ...profile, ...commits, ...lc };
 }

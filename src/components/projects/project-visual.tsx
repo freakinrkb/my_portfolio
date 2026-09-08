@@ -73,6 +73,26 @@ function AiFlowDiagram() {
   );
 }
 
+function ExtensionFlowDiagram() {
+  return (
+    <div role="img" aria-label="Extension flow: content tracker to background tracker to classifier to dashboard">
+      <div className="flex items-center gap-1.5">
+        <FlowNode label="Content" sub="Snapshot + pings" />
+        <FlowArrow />
+        <FlowNode label="Background" sub="Session machine" className="border-brand/40" />
+        <FlowArrow />
+        <FlowNode label="Classifier" sub="Local rules" />
+      </div>
+      <div className="mt-2 flex items-center gap-1.5">
+        <FlowNode label="Dexie DB" sub="On-device only" className="border-brand/40" />
+        <FlowArrow />
+        <FlowNode label="Dashboard" sub="Charts + insights" />
+        <div className="flex-1" aria-hidden />
+      </div>
+    </div>
+  );
+}
+
 function TerminalMockup() {
   const lines = [
     { prompt: "$", cmd: "GET /api/portfolio/pnl?range=1y", out: null },
@@ -108,7 +128,9 @@ function TerminalMockup() {
 export function ProjectVisual({ slug, className }: { slug: string; className?: string }) {
   return (
     <div className={cn("rounded-xl border bg-muted/40 p-4", className)}>
-      {slug.includes("lovable") ? (
+      {slug.includes("mindmirror") ? (
+        <ExtensionFlowDiagram />
+      ) : slug.includes("lovable") ? (
         <AiFlowDiagram />
       ) : slug.includes("razorpay") ? (
         <PaymentFlowDiagram />
