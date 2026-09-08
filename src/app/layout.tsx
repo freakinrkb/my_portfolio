@@ -4,10 +4,13 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { profile } from "@/content/portfolio";
+import { profile, socials } from "@/content/portfolio";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+
+// TODO: replace with the production domain once deployed.
+const SITE_URL = "https://example.com";
 
 export const metadata: Metadata = {
   title: {
@@ -15,9 +18,12 @@ export const metadata: Metadata = {
     template: `%s · ${profile.name}`,
   },
   description: profile.tagline,
-  metadataBase: new URL("https://example.com"),
+  metadataBase: new URL(SITE_URL),
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
+    url: SITE_URL,
+    siteName: profile.name,
     title: `${profile.name} — ${profile.title}`,
     description: profile.tagline,
   },
@@ -29,10 +35,21 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  jobTitle: profile.title,
+  email: `mailto:${profile.email}`,
+  address: profile.location,
+  sameAs: socials.map((s) => s.href),
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning className="h-full">
       <body className={`${geistSans.variable} ${geistMono.variable} flex min-h-full flex-col`}>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
         <ThemeProvider>
           <Navbar />
           <main id="main" className="flex flex-1 flex-col">
