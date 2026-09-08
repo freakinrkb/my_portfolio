@@ -9,8 +9,8 @@ import { profile, socials } from "@/content/portfolio";
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
-// TODO: replace with the production domain once deployed.
-const SITE_URL = "https://example.com";
+// Production domain — update if a custom domain is added in Vercel.
+const SITE_URL = "https://myportfolio-azure-delta.vercel.app";
 
 export const metadata: Metadata = {
   title: {

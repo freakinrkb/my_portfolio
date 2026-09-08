@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
 import { projects } from "@/content/portfolio";
 
-/** Static sitemap — update `SITE_URL` in layout.tsx once deployed. */
+/** Static sitemap for the production domain. */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = "https://example.com";
+  const base = "https://myportfolio-azure-delta.vercel.app";
   const routes = ["", "/about", "/projects", "/experience", "/skills", "/achievements", "/resume", "/contact"];
   return [
     ...routes.map((route) => ({ url: `${base}${route || "/"}`, lastModified: new Date() })),
